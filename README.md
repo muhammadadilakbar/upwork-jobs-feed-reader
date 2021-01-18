@@ -18,3 +18,7 @@ UpWork Jobs Feed Reader
 **How it works?**
 
 Upwork publishes RSS feeds of job postings. These php scripts read these feeds, parse them and store job postings in the database. The jobs from the database are displayed in the reverse chronological order.
+
+**Screenshot**
+
+![Upwork jobs feed reader screenshot](https://raw.githubusercontent.com/muhammadadilakbar/upwork-jobs-feed-reader/main/screenshot.png )
