@@ -1,0 +1,35 @@
+/*
+    Style definitions copied from feedly.com
+*/
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: sans-serif;
+}
+
+.title {
+    display: flex;
+    height: 31px;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid #efefefef;
+    border-right: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+    border-left: 1px solid transparent;
+    color: #333;
+    font-size: 13px;
+    cursor: pointer;
+}
+span#jobpubdate {
+    color: #888888;
+    font-weight: normal;
+}
+span#jobtitle {
+    font-weight: bold;
+}
+.description {
+    font-size: 15px;
+}
