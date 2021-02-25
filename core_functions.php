@@ -96,11 +96,47 @@ function create_read_show_jobs_file( $database_table_name, $h1_heading, $rss_lin
     $outputShowJobs = $outputShowJobs . <<<'MARK'
     <?php
     require( "mysqli_connect.php");
+    $display = 300; //number of records to show per page
+    // Determine how many pages there are...
+    if (isset($_GET['p']) && is_numeric($_GET['p']))
+    { // Already been determined.
+        $pages = $_GET['p'];
+    }
+    else // Need to determine.
+    {
+        // Count the number of records:
+        $q = "SELECT COUNT(id) FROM upwork.
+    MARK;
+    $outputShowJobs = $outputShowJobs . $database_table_name;
+    $outputShowJobs = $outputShowJobs . <<<'MARK'
+    ";
+        $r = @mysqli_query($dbc, $q);
+        $row = @mysqli_fetch_array($r, MYSQLI_NUM);
+        $records = $row[0];
+        // Calculate the number of pages...
+        if ($records > $display) // More than 1 page.
+        {
+            $pages = ceil ($records/$display);
+        }
+        else
+        {
+            $pages = 1;
+        }
+    }
+    // Determine where in the database to start returning results...
+    if (isset($_GET['s']) && is_numeric($_GET['s']))
+    {
+        $start = $_GET['s'];
+    }
+    else
+    {
+        $start = 0;
+    }
     $q = "SELECT id,title,description,pubdate,date_added,guid,status FROM upwork.
     MARK;
     $outputShowJobs = $outputShowJobs . $database_table_name . " ";
     $outputShowJobs = $outputShowJobs . <<<'MARK'
-    ORDER BY id DESC";
+    ORDER BY id DESC LIMIT $start, $display";
     $r = mysqli_query($dbc, $q);
     $num = mysqli_num_rows($r); // Count the number of returned rows
     if ($num > 0) // If it ran OK, display the records.
@@ -119,7 +155,43 @@ function create_read_show_jobs_file( $database_table_name, $h1_heading, $rss_lin
         }
         echo "</div>";
     }
+    mysqli_free_result($r);
     mysqli_close($dbc);
+    if ($pages > 1)
+    {
+        echo "<br><p>";
+        // Determine what page the script is on:
+        $current_page = ($start/$display) + 1;
+        // If it's not the first page, make a Previous link:
+        if ($current_page != 1) {
+            echo '<a href="
+    MARK;
+    $outputShowJobs = $outputShowJobs . $readShowJobsFileName;
+    $outputShowJobs = $outputShowJobs . <<<'MARK'
+    ?s=' . ($start - $display) . '&p=' . $pages . '">Previous</a> ';
+        }
+        // Make all the numbered pages:
+        for ($i = 1; $i <= $pages; $i++) {
+            if ($i != $current_page) {
+                echo '<a href="
+    MARK;
+    $outputShowJobs = $outputShowJobs . $readShowJobsFileName;
+    $outputShowJobs = $outputShowJobs . <<<'MARK'
+    ?s=' . (($display * ($i - 1))) . '&p=' . $pages . '">' . $i . '</a> ';
+            } else {
+                echo $i . ' ';
+            }
+        }
+        // If it's not the last page, make a Next button:
+        if ($current_page != $pages) {
+            echo '<a href="
+    MARK;
+    $outputShowJobs = $outputShowJobs . $readShowJobsFileName;
+    $outputShowJobs = $outputShowJobs . <<<'MARK'
+    ?s=' . ($start + $display) . '&p=' . $pages . '">Next</a>';
+        }
+        echo '</p>';
+    } // End of links section.
     ?>
     <script src="code.js" type="text/javascript"></script>
     </body>
