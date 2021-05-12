@@ -9,8 +9,8 @@ if( $_SERVER["REQUEST_METHOD"] == "POST" )
     $h1_heading = "";
     $rss_link = "";
     $errors = "";
-    if( !check_if_database_already_exists() ) //if the database named "upwork" doesn't exists, then create the database with the same name
-        create_new_database();
+    //if( !check_if_database_already_exists() ) //if the database named "upwork" doesn't exists, then create the database with the same name
+    //    create_new_database();
     if( !empty( $_POST["database_table_name"] ) )
         $database_table_name = $_POST["database_table_name"];
     else

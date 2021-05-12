@@ -2,7 +2,7 @@
 
 require( "mysqli_connect.php");
 $guid = $_POST['guid'];
-$category = "upwork." . $_POST["category"];
+$category = $_POST["category"];
 $q = "UPDATE $category SET status='y' WHERE guid='$guid'";
 $r = mysqli_query($dbc, $q); // Run the query.
 $outputArray = array();

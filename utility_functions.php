@@ -35,15 +35,14 @@ function create_new_database()
 function create_database_table( $table_name )
 {
 	global $dbc;
-	$full_table_name = "upwork." . $table_name; //upwork is MySQL database name
-	$q = "CREATE TABLE " . $full_table_name . " ( id INT UNSIGNED NOT NULL AUTO_INCREMENT, title VARCHAR(500) NOT NULL, link VARCHAR(1000) NOT NULL, description TEXT, pubdate CHAR(31), date_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP, guid_complete VARCHAR(1000), guid CHAR(20) NOT NULL, status CHAR(1), PRIMARY KEY (id) ) ENGINE=INNODB";
+	$q = "CREATE TABLE " . $table_name . " ( id INT UNSIGNED NOT NULL AUTO_INCREMENT, title VARCHAR(500) NOT NULL, link VARCHAR(1000) NOT NULL, description TEXT, pubdate CHAR(31), date_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP, guid_complete VARCHAR(1000), guid CHAR(20) NOT NULL, status CHAR(1), PRIMARY KEY (id) ) ENGINE=INNODB";
 	if( mysqli_query($dbc, $q) ) //execute the SQL query
 	{
-		echo "Table " . $full_table_name . " created successfully. <br />\n";
+		echo "Table " . $table_name . " created successfully. <br />\n";
 	}
 	else
 	{
-		echo "Table " . $full_table_name . " creation failed. <br />\n";
+		echo "Table " . $table_name . " creation failed. <br />\n";
 		echo "Error description: " . mysqli_error($dbc) . "<br />\n";
 	}
 }
@@ -58,7 +57,7 @@ function check_if_database_already_exists()
     {
         while( $row = mysqli_fetch_array($r, MYSQLI_ASSOC) )
         {
-            if( $row["Database"] === "upwork" )
+            if( $row["Database"] === DB_NAME )
             {
                 return true;
             }
@@ -70,15 +69,14 @@ function check_if_database_already_exists()
 function truncate_database_table( $table_name )
 {
 	global $dbc;
-	$full_table_name = "upwork." . $table_name;
-	$q = "TRUNCATE TABLE " . $full_table_name;
+	$q = "TRUNCATE TABLE " . $table_name;
 	if( mysqli_query($dbc, $q) )
 	{
-		echo "Table " . $full_table_name . " truncated successfully. <br />\n";
+		echo "Table " . $table_name . " truncated successfully. <br />\n";
 	}
 	else
 	{
-		echo "Table " . $full_table_name . " truncation failed. <br />\n";
+		echo "Table " . $table_name . " truncation failed. <br />\n";
 		echo "Error description: " . mysqli_error($dbc) . "<br />\n";
 	}
 }
@@ -86,15 +84,14 @@ function truncate_database_table( $table_name )
 function delete_files( $table_name )
 {
 	global $dbc;
-	$full_table_name = "upwork." . $table_name;
-	$q = "DROP TABLE " . $full_table_name;
+	$q = "DROP TABLE " . $table_name;
 	if( mysqli_query($dbc, $q) )
 	{
-		echo "<br />Table " . $full_table_name . " deleted successfully. <br />\n";
+		echo "<br />Table " . $table_name . " deleted successfully. <br />\n";
 	}
 	else
 	{
-		echo "Table " . $full_table_name . " truncation failed. <br />";
+		echo "Table " . $table_name . " deletion failed. <br />";
 		echo "Error description: " . mysqli_error($dbc) . "<br />";
     }
     if( unlink( "readfeed_" . $table_name . ".php" ) )
@@ -111,14 +108,14 @@ function get_table_names()
 {
     global $dbc;
     $databaseTablesNames = array(); //initialize array
-    $q = "SHOW TABLES FROM upwork";
+    $q = "SHOW TABLES";
     $r = mysqli_query( $dbc, $q ); //run the query, store the returned rows in $r
     $num = mysqli_num_rows($r); // Count the number of returned rows
     if ($num > 0) // If it ran OK, store the table names in $databaseTablesNames array.
     {
-        while( $row = mysqli_fetch_array($r, MYSQLI_ASSOC) )
+        while( $row = mysqli_fetch_array($r, MYSQLI_NUM) )
         {
-            $databaseTablesNames[] =  $row["Tables_in_upwork"];
+            $databaseTablesNames[] =  $row[0];
         }
     }
     mysqli_free_result($r);

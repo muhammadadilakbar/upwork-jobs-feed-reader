@@ -26,7 +26,7 @@ function create_read_feed_file( $database_table_name, $h1_heading, $rss_link )
         $guid_complete = mysqli_real_escape_string( $dbc, $children->item(5)->nodeValue );
         $guid = substr( $guid_complete ,-31, 20);
         
-        $q = "SELECT title, link, description FROM upwork.
+        $q = "SELECT title, link, description FROM 
     MARK;
     $output = $output . $database_table_name . " ";
     $output = $output . <<<'MARK'
@@ -40,7 +40,7 @@ function create_read_feed_file( $database_table_name, $h1_heading, $rss_link )
         }
         else //it's a new job. Insert it into the DB table.
         {
-            $q2 = "INSERT INTO upwork.
+            $q2 = "INSERT INTO 
     MARK;
     $output = $output . $database_table_name . " ";
     $output = $output . <<<'MARK'
@@ -105,7 +105,7 @@ function create_read_show_jobs_file( $database_table_name, $h1_heading, $rss_lin
     else // Need to determine.
     {
         // Count the number of records:
-        $q = "SELECT COUNT(id) FROM upwork.
+        $q = "SELECT COUNT(id) FROM 
     MARK;
     $outputShowJobs = $outputShowJobs . $database_table_name;
     $outputShowJobs = $outputShowJobs . <<<'MARK'
@@ -132,7 +132,7 @@ function create_read_show_jobs_file( $database_table_name, $h1_heading, $rss_lin
     {
         $start = 0;
     }
-    $q = "SELECT id,title,description,pubdate,date_added,guid,status FROM upwork.
+    $q = "SELECT id,title,description,pubdate,date_added,guid,status FROM 
     MARK;
     $outputShowJobs = $outputShowJobs . $database_table_name . " ";
     $outputShowJobs = $outputShowJobs . <<<'MARK'
